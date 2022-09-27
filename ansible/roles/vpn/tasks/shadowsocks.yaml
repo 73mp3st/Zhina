@@ -1,0 +1,17 @@
+- name: config shadowsocks
+  become: true
+  template:
+    src: config.json.conf
+    dest: /home/config.json
+
+- name: start shadowsocks-rust with simpl-obfs
+  become: yes
+  community.docker.docker_container:
+    name: ss-server
+    image: 73mp3st/shadowsocks:simple-obfs-0.1.0
+    published_ports: ["{{ port }}:{{ port }}/tcp", "{{ port }}:{{ port }}/udp"]
+    volumes: ["/home/config.json:/etc/shadowsocks-rust/config.json"]
+    detach: yes
+    restart_policy: always
+    state: started
+    restart: yes

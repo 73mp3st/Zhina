@@ -1,0 +1,20 @@
+- name: config shadowsocks
+  become: true
+  template:
+    src: ss-proxy.conf
+    dest: /home/nginx.conf
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0666'
+
+- name: start nginx
+  become: yes
+  community.docker.docker_container:
+    name: nginx
+    image: m.docker-registry.ir/nginx:latest
+    published_ports: ["{{ port }}:{{ port }}/tcp", "{{ port }}:{{ port }}/udp"]
+    volumes: ["/home/nginx.conf:/etc/nginx/nginx.conf"]
+    detach: yes
+    restart_policy: always
+    state: started
+    restart: yes

@@ -1,0 +1,11 @@
+my-name:
+  hosts:
+    iran-vm-my-name:
+      user:
+      ip_address:
+      ss_host: [SAME]
+      iran: true
+    netherland-vm-my-name:
+      user:
+      ip_address: [SAME]
+      ss_password:

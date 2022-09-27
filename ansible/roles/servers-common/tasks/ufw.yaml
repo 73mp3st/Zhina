@@ -1,0 +1,16 @@
+- name: Allow OpenSSH from anywhere
+  become: yes
+  ufw:
+    rule: allow
+    name: OpenSSH
+- name: Enable ufw
+  become: yes
+  ufw:
+    state: enabled
+    policy: deny
+    direction: incoming
+- name: Allow ports in vms
+  become: yes
+  ufw:
+    rule: allow
+    port: "{{ port }}"
