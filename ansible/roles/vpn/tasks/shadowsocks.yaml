@@ -1,0 +1,47 @@
+- name: create cloak directory
+  become: true
+  file:
+    path: /home/cloak
+    state: directory
+
+- name: touch ck config file
+  become: true
+  file:
+    path: /home/cloak/config.json
+    state: touch
+    mode: '0664'
+
+- name: touch connection file
+  become: true
+  file:
+    path: /home/cloak/connection.yaml
+    state: touch
+    mode: '0664'
+
+- name: create shadowsocks config
+  become: true
+  template:
+    src: config.json.conf
+    dest: /home/cloak/ss_config.json
+
+- name: start shadowsocks-rust with cloak
+  become: yes
+  community.docker.docker_container:
+    name: ck-ss-server
+    image: 73mp3st/shadowsocks:cloak-0.1.0
+    pull: yes
+    published_ports: ["{{ port }}:8388/tcp", "{{ port }}:8388/udp"]
+    volumes: 
+      - "/home/cloak/ss_config.json:/etc/shadowsocks-rust/config.json"
+      - "/home/cloak/config.json:/home/config.json"
+      - "/home/cloak/connection.yaml:/home/connection.yaml"
+    detach: yes
+    restart_policy: always
+    state: started
+    restart: yes
+
+- name: storing connection file into local
+  fetch:
+    src: /home/cloak/connection.yaml
+    dest: cloak-configs/{{ inventory_hostname }}.yaml
+    flat: yes

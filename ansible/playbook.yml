@@ -1,0 +1,34 @@
+- name: main
+  hosts: all
+  tasks:        
+    - import_role:
+        name: servers-common
+        tasks_from: ufw
+      tags:
+        - ufw
+  
+    - import_role:
+        name: servers-common
+        tasks_from: packages
+      tags:
+        - packages
+
+- name: sets up shadowsocks-rust
+  hosts: all
+  tasks:
+    - import_role:
+        name: vpn
+        tasks_from: shadowsocks
+      tags:
+        - shadowsocks
+      when: iran is undefined
+  
+- name: sets up nginx proxy
+  hosts: all
+  tasks:
+    - import_role:
+        name: proxy
+        tasks_from: nginx
+      tags:
+        - nginx
+      when: iran is defined

@@ -1,0 +1,10 @@
+- name: install required packages
+  become: true
+  apt:
+    state: latest
+    name:
+    - docker.io
+    - python3
+    - python3-pip
+    - python3-docker
+    update_cache: yes

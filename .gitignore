@@ -1,0 +1,2 @@
+ansible/cloak-configs/*.yaml
+ansible/inventory/inventory.yaml

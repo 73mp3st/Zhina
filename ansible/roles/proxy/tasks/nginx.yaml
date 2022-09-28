@@ -1,0 +1,26 @@
+- name: create cloak directory
+  become: true
+  file:
+    path: /home/cloak
+    state: directory
+
+- name: configure nginx
+  become: true
+  template:
+    src: ss-proxy.conf
+    dest: /home/cloak/nginx.conf
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0666'
+
+- name: start nginx
+  become: yes
+  community.docker.docker_container:
+    name: ck-nginx
+    image: m.docker-registry.ir/nginx:latest
+    published_ports: ["{{ port }}:443/tcp", "{{ port }}:443/udp"]
+    volumes: ["/home/cloak/nginx.conf:/etc/nginx/nginx.conf"]
+    detach: yes
+    restart_policy: always
+    state: started
+    restart: yes

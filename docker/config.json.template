@@ -1,0 +1,18 @@
+{
+  "ProxyBook": {
+    "shadowsocks": [
+      "tcp_and_udp",
+      "127.0.0.1:8388"
+    ]
+  },
+  "BindAddr": [
+    ":4430"
+  ],
+  "BypassUID": [
+    "${CKUID}"
+  ],
+  "RedirAddr": "bing.com",
+  "PrivateKey": "${PRIVATE_KEY}",
+  "AdminUID": "${CKUID}",
+  "DatabasePath": "/home/userinfo.db"
+}
